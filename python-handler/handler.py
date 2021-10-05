@@ -12,13 +12,21 @@ logging.basicConfig(level=logging.INFO,
 
 """ Runtimes Information """
 runtimes: dict = {
-    "python3": "localhost:50051"  # Should Make The Port Constant
+    "python3": "localhost:50051",  # Should Make The Port Constant,
+    "nodejs": "0.0.0.0:50052"  # Should Make The Port Constant
 }
 
 
 """ Request Payload , Let's create a global payload structure"""
 request_payload: dict = {
     "runtime": "python3",
+    "action": "run",
+    "payload": "hello",
+    "sid": "ABC_788_GHGH"  # For Sandboxing each request
+}
+
+request_payload_node: dict = {
+    "runtime": "nodejs",
     "action": "run",
     "payload": "hello",
     "sid": "ABC_788_GHGH"  # For Sandboxing each request
@@ -31,11 +39,10 @@ def InvokeRuntime(payload: dict) -> bool:
     :param payload:
     :return:
     """
-    # Find the runtme
+    #Find the runtme
     runtime = runtimes[payload["runtime"]]
     logging.info("Invoking Runtime {}".format(runtime))
     grpc_client.run(runtime)
-
     return False
 
 
@@ -43,6 +50,7 @@ if __name__ == '__main__':
     print("starting")
 
     try:
-        InvokeRuntime(request_payload)
+        #InvokeRuntime(request_payload)
+        InvokeRuntime(request_payload_node)  
     except Exception as e:
         print("Oops!", e.__class__, "occurred.")
